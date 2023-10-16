@@ -6,6 +6,7 @@ INTERFACE_NAME=$1
 DISK_PATH=$2
 DISK_MOUNT_PATH=/mnt/beegfs-server
 
+mkdir -p $DISK_MOUNT_PATH
 mount $DISK_PATH $DISK_MOUNT_PATH
 
 if [[ $? -ne 0 ]]; then
