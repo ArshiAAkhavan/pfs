@@ -2,7 +2,7 @@
 
 function cash_sync {
   sync
-  echo 3 > /proc/sys/drop_caches
+  echo 3 > /proc/sys/vm/drop_caches
 }
 
 BENCH_NAME=$1
