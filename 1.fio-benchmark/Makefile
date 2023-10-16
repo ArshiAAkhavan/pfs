@@ -11,3 +11,10 @@ beegfs-fallocate-target: /mnt/beegfs/f20g
 
 beegfs-bench: beegfs-fallocate-target
 	./repeat-bench.sh beegfs $(DISK_NAME) 20 /mnt/beegfs/f20g
+
+
+cephfs-fallocate-target: /mnt/cephfs/f20g
+	dd if=/dev/urandom of=/mnt/cephfs/f20g bs=10M count=2000
+	
+cephfs-bench: ceph-fallocate-target
+	./repeat-bench.sh ceph $(DISK_NAME) 20 /mnt/ceph/f20g
