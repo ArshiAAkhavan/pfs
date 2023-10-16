@@ -9,5 +9,5 @@ mkdir -p out
 cd out
 for i in `seq 1 $REPEAT`
 do 
-  ./fio.sh ${PFS_NAME}-${DISK}-${i} $TARGET_FILE
+  ../fio.sh ${PFS_NAME}-${DISK}-${i} $TARGET_FILE
 done

@@ -5,7 +5,9 @@ beegfs-server:
 beegfs-cleanup:
 	./beegfs-cleanup.sh
 
-beegfs-bench:
+beegfs-fallocate-target: /mnt/beegfs/f20g
 	systemctl restart beegfs-client
 	dd if=/dev/urandom of=/mnt/beegfs/f20g bs=10M count=2000
+
+beegfs-bench: beegfs-fallocate-target
 	./repeat-bench.sh beegfs $(DISK_NAME) 20 /mnt/beegfs/f20g
