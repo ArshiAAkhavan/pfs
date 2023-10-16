@@ -7,6 +7,7 @@ DISK_PATH=$2
 DISK_MOUNT_PATH=/mnt/beegfs-server
 
 mkdir -p $DISK_MOUNT_PATH
+yes|mkfs.ext4 $DISK_PATH
 mount $DISK_PATH $DISK_MOUNT_PATH
 
 if [[ $? -ne 0 ]]; then
