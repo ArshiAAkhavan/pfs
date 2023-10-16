@@ -17,4 +17,4 @@ cephfs-fallocate-target:
 	dd if=/dev/urandom of=/mnt/cephfs/f20g bs=10M count=2000
 	
 cephfs-bench: cephfs-fallocate-target
-	./repeat-bench.sh ceph $(DISK_NAME) 20 /mnt/ceph/f20g
+	./repeat-bench.sh ceph $(DISK_NAME) 20 /mnt/cephfs/f20g
