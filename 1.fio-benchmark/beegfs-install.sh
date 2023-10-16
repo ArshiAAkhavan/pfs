@@ -4,6 +4,14 @@
 
 INTERFACE_NAME=$1
 DISK_PATH=$2
+DISK_MOUNT_PATH=/mnt/beegfs-server
+
+mount $DISK_PATH $DISK_MOUNT_PATH
+
+if [[ $? -ne 0 ]]; then
+  echo "couldn't mount the disk"
+  exit 1
+fi
 
 export beegfs_connInterfacesList=$INTERFACE_NAME
 export beegfs_sysMgmtdHost=`ip a | grep $INTERFACE_NAME | grep inet | head -n1 | awk '{print$2}' | cut -d '/' -f1`
@@ -36,7 +44,7 @@ docker run \
 docker run \
   --name="beegfs-storage" \
   --privileged --network="host" \
-  --volume="${DISK_PATH}/stor_01_tgt_101:/mnt/stor_01_tgt_101" \
+  --volume="${DISK_MOUNT_PATH}/stor_01_tgt_101:/mnt/stor_01_tgt_101" \
   --env beegfs_setup_1="beegfs-setup-storage -C -p /mnt/stor_01_tgt_101 -s 1 -S stor_01_tgt_101 -i 101" \
   -d beegfs/beegfs-storage:latest \
   sysMgmtdHost=$beegfs_sysMgmtdHost \
