@@ -1,5 +1,4 @@
-beegfs-server: DISK_PATH INTERFACE_NAME
-	./beegfs-cleanup.sh
+beegfs-server: DISK_PATH INTERFACE_NAME beegfs-cleanup
 	./beegfs-install.sh $(INTERFACE_NAME) $(DISK_PATH)
 
 beegfs-cleanup:
