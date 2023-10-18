@@ -45,18 +45,26 @@ def parse_fio_output(filename: str):
     unit = 1000 if iops_match.group(4) else 1
     iops = int(base * unit)
 
+    # Extract bandwith
+    bandwith_match = re.search(r"bw=((\d+)(\.\d+)?)(MiB/s?)", fio_output)
+    if bandwith_match is None:
+        raise ValueError("Could not find BW in FIO output.")
+    base = float(bandwith_match.group(1))
+    unit = 1000*1000 if bandwith_match.group(4) else 1
+    bandwith = int(base * unit)
+
     # Extract total runtime
     runtime_match = re.search(r"run=\S*-(\d+)msec", fio_output)
     if runtime_match is None:
         raise ValueError("Could not find total runtime in FIO output.")
     runtime = int(runtime_match.group(1)) / 1000
 
-    return iops, runtime
+    return iops, bandwith, runtime
 
 
 if __name__ == "__main__":
     bench_types = ["random-read", "random-write", "sequential-read", "sequential-write"]
-    benches = {"ceph-sdb": {}, "beegfs-ssd": {}, "beegfs-sdb": {}}
+    benches = {"ceph-sdb": {}, "ceph-ssd": {}, "beegfs-ssd": {}, "beegfs-sdb": {}}
     for bench in benches:
         for bench_type in bench_types:
             benches[bench][bench_type] = []
@@ -66,10 +74,10 @@ if __name__ == "__main__":
         filename_prefix = f"{bench_name}-{i}"
         while os.system(f"ls out/{filename_prefix}-*") == 0:
             for bench_type in bench_types:
-                iops, runtime = parse_fio_output(
+                iops, bw, runtime = parse_fio_output(
                     f"out/{filename_prefix}-{bench_type}.txt"
                 )
-                bench_res[bench_type].append((iops, runtime))
+                bench_res[bench_type].append((iops, bw,runtime))
             i += 1
             filename_prefix = f"{bench_name}-{i}"
 
@@ -78,15 +86,16 @@ if __name__ == "__main__":
         benches_avg[key] = {}
         for bench_type, metrics in res.items():
             avg_metric = functools.reduce(
-                lambda x, y: (x[0] + y[0], x[1] + y[1]), metrics
+                lambda x, y: (x[0] + y[0], x[1] + y[1], x[2] + y[2]), metrics
             )
             benches_avg[key][bench_type] = {
                 "iops": avg_metric[0] / len(metrics),
-                "runtime": avg_metric[1] / len(metrics),
+                "bw": avg_metric[1] / len(metrics),
+                "runtime": avg_metric[2] / len(metrics),
             }
     print(benches_avg)
 
     # Plot the charts.
     for experiment_type in bench_types:
-        for metric_name in ["iops", "runtime"]:
+        for metric_name in ["iops", "bw", "runtime"]:
             plot_chart(experiment_type, metric_name, benches_avg)
