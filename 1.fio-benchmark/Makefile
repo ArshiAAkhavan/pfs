@@ -12,8 +12,8 @@ beegfs-bench: DISK_NAME /mnt/beegfs/f20g
 	./repeat-bench.sh beegfs $(DISK_NAME) 20 /mnt/beegfs/f20g
 
 
-ceph-server:
-	./ceph-install.sh
+ceph-server: MON_IP
+	./ceph-install.sh $(MON_IP)
 
 ceph-mount-fs: DISK_PATH
 	wipefs -a $(DISK_PATH)
@@ -27,6 +27,9 @@ ceph-mount-fs: DISK_PATH
 	
 cephfs-bench: DISK_NAME /mnt/cephfs/f20g
 	./repeat-bench.sh ceph $(DISK_NAME) 20 /mnt/cephfs/f20g
+
+MON_IP:
+	$(if $(value MON_IP),,$(error MON_IP var is empty))
 
 DISK_NAME:
 	$(if $(value DISK_NAME),,$(error DISK_NAME var is empty))
