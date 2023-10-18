@@ -38,7 +38,7 @@ disk-bench: DISK_NAME DISK_PATH
 	umount /mnt/raw || true
 	mount $(DISK_PATH) /mnt/raw
 	dd if=/dev/urandom of=/mnt/raw/f20g bs=10M count=2000
-	./repeat-bench.sh $(DISK_NAME) 20 /mnt/raw/f20g
+	./repeat-bench.sh local $(DISK_NAME) 20 /mnt/raw/f20g
 
 MON_IP:
 	$(if $(value MON_IP),,$(error MON_IP var is empty))
