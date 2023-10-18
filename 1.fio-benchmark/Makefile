@@ -15,6 +15,10 @@ beegfs-bench: DISK_NAME /mnt/beegfs/f20g
 ceph-server: MON_IP
 	./ceph-install.sh $(MON_IP)
 
+ceph-cleanup:
+	./ceph-cleanup.sh
+
+
 ceph-mount-fs: DISK_PATH
 	wipefs -a $(DISK_PATH)
 	ceph orch daemon add osd $$(hostnamectl hostname):$(DISK_PATH)
