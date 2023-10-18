@@ -28,15 +28,12 @@ ceph-mount-fs: DISK_PATH
 cephfs-bench: DISK_NAME /mnt/cephfs/f20g
 	./repeat-bench.sh ceph $(DISK_NAME) 20 /mnt/cephfs/f20g
 
-/mnt/raw/f20g: 
-	dd if=/dev/urandom of=/mnt/beegfs/f20g bs=10M count=2000
-
 disk-bench: DISK_NAME DISK_PATH 
 	mkdir -p /mnt/raw
 	umount $(DISK_PATH) || true
 	umount /mnt/raw
 	mount $(DISK_PATH) /mnt/raw
-	make /mnt/raw/f20g
+	dd if=/dev/urandom of=/mnt/beegfs/f20g bs=10M count=2000
 	./repeat-bench.sh $(DISK_NAME) 20 /mnt/raw/f20g
 
 MON_IP:
