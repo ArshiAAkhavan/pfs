@@ -31,7 +31,7 @@ cephfs-bench: DISK_NAME /mnt/cephfs/f20g
 disk-bench: DISK_NAME DISK_PATH 
 	mkdir -p /mnt/raw
 	umount $(DISK_PATH) || true
-	umount /mnt/raw
+	umount /mnt/raw || true
 	mount $(DISK_PATH) /mnt/raw
 	dd if=/dev/urandom of=/mnt/beegfs/f20g bs=10M count=2000
 	./repeat-bench.sh $(DISK_NAME) 20 /mnt/raw/f20g
