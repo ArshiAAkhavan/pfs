@@ -56,7 +56,7 @@ def parse_fio_output(filename: str):
 
 if __name__ == "__main__":
     bench_types = ["random-read", "random-write", "sequential-read", "sequential-write"]
-    benches = {"ceph-sdb": {}, "beegfs-sdb": {}}
+    benches = {"ceph-sdb": {}, "beegfs-ssd": {}, "beegfs-sdb": {}}
     for bench in benches:
         for bench_type in bench_types:
             benches[bench][bench_type] = []

@@ -12,10 +12,20 @@ beegfs-bench: DISK_NAME /mnt/beegfs/f20g
 	./repeat-bench.sh beegfs $(DISK_NAME) 20 /mnt/beegfs/f20g
 
 
-cephfs-fallocate-target: 
+ceph-server:
+	./ceph-install.sh
+
+ceph-mount-fs: DISK_PATH
+	wipefs -a $(DISK_PATH)
+	ceph orch daemon add osd $$(hostnamectl hostname):$(DISK_PATH)
+	ceph fs volume create benchfs
+	mkdir -p /mnt/cephfs
+	mount -t ceph admin@$$(ceph fsid).benchfs=/ /mnt/cephfs
+
+/mnt/cephfs/f20g: 
 	dd if=/dev/urandom of=/mnt/cephfs/f20g bs=10M count=2000
 	
-cephfs-bench: DISK_NAME cephfs-fallocate-target
+cephfs-bench: DISK_NAME /mnt/cephfs/f20g
 	./repeat-bench.sh ceph $(DISK_NAME) 20 /mnt/cephfs/f20g
 
 DISK_NAME:
