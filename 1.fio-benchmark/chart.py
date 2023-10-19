@@ -30,6 +30,7 @@ def plot_chart(experiment_type, metric_name, experiment_results):
     plt.ylabel(metric_name)
 
     # Show the chart.
+    plt.savefig(f"res/{experiment_type}-{metric_name}.png")
     plt.show()
 
 
@@ -64,7 +65,8 @@ def parse_fio_output(filename: str):
 
 if __name__ == "__main__":
     bench_types = ["random-read", "random-write", "sequential-read", "sequential-write"]
-    benches = {"ceph-sdb": {}, "ceph-ssd": {}, "beegfs-ssd": {}, "beegfs-sdb": {}}
+    benches = {"ceph-hdd": {}, "ceph-ssd": {}, "beegfs-ssd": {}, "beegfs-hdd": {}, "local-ssd": {} #,"local-hdd":{}
+               }
     for bench in benches:
         for bench_type in bench_types:
             benches[bench][bench_type] = []
