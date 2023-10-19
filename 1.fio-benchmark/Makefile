@@ -36,7 +36,7 @@ disk-bench: DISK_NAME DISK_PATH
 	mkdir -p /mnt/raw
 	umount $(DISK_PATH) || true
 	umount /mnt/raw || true
-	mkfs.ext4 $(DISK_PATH) -f
+	yes | mkfs.ext4 $(DISK_PATH) 
 	mount $(DISK_PATH) /mnt/raw
 	dd if=/dev/urandom of=/mnt/raw/f20g bs=10M count=2000
 	./repeat-bench.sh local $(DISK_NAME) 20 /mnt/raw/f20g
